@@ -40,6 +40,10 @@ use crate::types::{
     SectorSize, Ticket, BINARY_ARITY,
 };
 
+use chrono::prelude::*;
+
+extern crate chrono;
+
 #[allow(clippy::too_many_arguments)]
 pub fn seal_pre_commit_phase1<R, S, T, Tree: 'static + MerkleTreeTrait>(
     porep_config: PoRepConfig,
@@ -56,6 +60,7 @@ where
     S: AsRef<Path>,
     T: AsRef<Path>,
 {
+    let seal_pre_commit_phase1_start = Local::now();
     info!("seal_pre_commit_phase1:start");
 
     // Sanity check all input path types.
@@ -185,6 +190,12 @@ where
     };
 
     info!("seal_pre_commit_phase1:finish");
+
+    let seal_pre_commit_phase1_end = Local::now();
+
+    warn!("seal_pre_commit_phase1 delta time is {}", seal_pre_commit_phase1_end.timestamp_millis() -
+        seal_pre_commit_phase1_start.timestamp_millis());
+
     Ok(out)
 }
 
