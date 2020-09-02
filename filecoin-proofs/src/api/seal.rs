@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 use anyhow::{ensure, Context, Result};
 use bincode::{deserialize, serialize};
-use log::{info, trace};
+use log::{info, trace, warn};
 use memmap::MmapOptions;
 use merkletree::store::{DiskStore, Store, StoreConfig};
 use paired::bls12_381::Fr;
