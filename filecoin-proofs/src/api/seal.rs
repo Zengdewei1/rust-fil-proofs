@@ -343,7 +343,7 @@ pub fn seal_commit_phase1<T: AsRef<Path>, Tree: 'static + MerkleTreeTrait>(
 ) -> Result<SealCommitPhase1Output<Tree>> {
     info!("seal_commit_phase1:start");
 
-    let seal_commit_phase1_start = Local::now()
+    let seal_commit_phase1_start = Local::now();
 
     // Sanity check all input path types.
     ensure!(
@@ -454,7 +454,7 @@ pub fn seal_commit_phase1<T: AsRef<Path>, Tree: 'static + MerkleTreeTrait>(
         ticket,
     };
 
-    let seal_commit_phase1_end = Local::now()
+    let seal_commit_phase1_end = Local::now();
 
     warn!("seal_commit_phase1_delta is {}ms", seal_commit_phase1_end.timestamp_millis() -
         seal_commit_phase1_start.timestamp_millis());
