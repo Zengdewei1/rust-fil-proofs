@@ -40,6 +40,9 @@ pub use self::seal::*;
 
 use storage_proofs::pieces::generate_piece_commitment_bytes_from_source;
 
+extern crate chrono;
+use chrono::prelude::*;
+
 /// Unseals the sector at `sealed_path` and returns the bytes for a piece
 /// whose first (unpadded) byte begins at `offset` and ends at `offset` plus
 /// `num_bytes`, inclusive. Note that the entire sector is unsealed each time
@@ -253,6 +256,8 @@ where
 {
     info!("add_piece:start");
 
+    let add_piece_start = Local::now();
+
     let result = measure_op(Operation::AddPiece, || {
         ensure_piece_size(piece_size)?;
 
@@ -291,6 +296,10 @@ where
 
         Ok((PieceInfo::new(comm, n)?, written))
     });
+
+    let add_piece_end = Local::now();
+
+    warn!("add_piece is {}ms", add_piece_end.timestamp_millis() - add_piece_start.timestamp_millis());
 
     info!("add_piece:finish");
     result

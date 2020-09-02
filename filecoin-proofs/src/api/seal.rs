@@ -210,6 +210,8 @@ where
     R: AsRef<Path>,
     S: AsRef<Path>,
 {
+    let seal_pre_commit_phase2_start = Local::now();
+
     info!("seal_pre_commit_phase2:start");
 
     // Sanity check all input path types.
@@ -318,6 +320,11 @@ where
 
     let out = SealPreCommitOutput { comm_r, comm_d };
 
+    let seal_pre_commit_phase2_end = Local::now();
+
+    warn!("seal_pre_commit_phase2_delta is {}ms", seal_pre_commit_phase2_end.timestamp_millis() -
+        seal_pre_commit_phase2_start.timestamp_millis());
+
     info!("seal_pre_commit_phase2:finish");
     Ok(out)
 }
@@ -335,6 +342,8 @@ pub fn seal_commit_phase1<T: AsRef<Path>, Tree: 'static + MerkleTreeTrait>(
     piece_infos: &[PieceInfo],
 ) -> Result<SealCommitPhase1Output<Tree>> {
     info!("seal_commit_phase1:start");
+
+    let seal_commit_phase1_start = Local::now()
 
     // Sanity check all input path types.
     ensure!(
@@ -445,6 +454,11 @@ pub fn seal_commit_phase1<T: AsRef<Path>, Tree: 'static + MerkleTreeTrait>(
         ticket,
     };
 
+    let seal_commit_phase1_end = Local::now()
+
+    warn!("seal_commit_phase1_delta is {}ms", seal_commit_phase1_end.timestamp_millis() -
+        seal_commit_phase1_start.timestamp_millis());
+
     info!("seal_commit_phase1:finish");
     Ok(out)
 }
@@ -457,6 +471,8 @@ pub fn seal_commit_phase2<Tree: 'static + MerkleTreeTrait>(
     sector_id: SectorId,
 ) -> Result<SealCommitOutput> {
     info!("seal_commit_phase2:start");
+
+    let seal_commit_phase2_start = Local::now();
 
     let SealCommitPhase1Output {
         vanilla_proofs,
@@ -538,6 +554,11 @@ pub fn seal_commit_phase2<Tree: 'static + MerkleTreeTrait>(
     .context("post-seal verification sanity check failed")?;
 
     let out = SealCommitOutput { proof: buf };
+
+    let seal_commit_phase2_end = Local::now();
+
+    warn!("seal_commit_phase2_delta is {}ms", seal_commit_phase2_end.timestamp_millis() -
+        seal_commit_phase2_start.timestamp_millis());
 
     info!("seal_commit_phase2:finish");
     Ok(out)
